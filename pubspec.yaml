@@ -30,7 +30,7 @@ dev_dependencies:
 flutter_icons:
   android: true            # generate for Android
   ios: true                # generate for iOS
-  image_path: "assets/app_logo.png"
+  image_path: "assets/logo.png"
   # optionally, if you need adaptive icons on Android:
   adaptive_icon_background: "#FFFCFCFC"
   adaptive_icon_foreground: "assets/app_logo.png"
