@@ -43,7 +43,7 @@ class ItemsPageState extends State<ItemsPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF3A0CA3), Color(0xFFF72585)],
+            colors: [Color(0xFFFF8FAB), Color(0xFFFAD9C1)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -56,8 +56,8 @@ class ItemsPageState extends State<ItemsPage> {
                 child: Row(
                   children: [
                     Text(
-                      '🛍️ Thrift Store',
-                      style: GoogleFonts.poppins(
+                      '𓇼 ⋆.˚ 𓆉 𓆝 𓆡⋆.˚ 𓇼reRun Store𓇼 ⋆.˚ 𓆉 𓆝 𓆡⋆.˚ 𓇼',
+                      style: GoogleFonts.pacifico(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -103,7 +103,7 @@ class ItemsPageState extends State<ItemsPage> {
                           child: Text(
                             'No treasures yet 🧐',
                             style: GoogleFonts.poppins(
-                              color: Colors.white70,
+                              color: Colors.white,
                               fontSize: 18,
                             ),
                           ),
@@ -194,7 +194,7 @@ class ItemsPageState extends State<ItemsPage> {
                                         'Php ${item.price.toStringAsFixed(2)}',
                                         style: GoogleFonts.poppins(
                                           fontSize: 14,
-                                          color: const Color(0xFF7209B7),
+                                          color: const Color(0xFFE0778C),
                                         ),
                                       ),
                                       const SizedBox(height: 6),
@@ -213,7 +213,7 @@ class ItemsPageState extends State<ItemsPage> {
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
-                                            const Color(0xFFF72585),
+                                            const Color(0xFFE0778C),
                                             padding:
                                             const EdgeInsets.symmetric(
                                                 vertical: 10),
@@ -254,11 +254,11 @@ class ItemsPageState extends State<ItemsPage> {
                 padding: const EdgeInsets.all(16),
                 child: FloatingActionButton.extended(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF3A0CA3),
+                  foregroundColor: const Color(0xFFFF8FAB),
                   icon: const Icon(Icons.add),
                   label: Text(
                     'Add New',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
+                    style: GoogleFonts.pacifico(fontWeight: FontWeight.w600),
                   ),
                   onPressed: () async {
                     await Navigator.pushNamed(context, '/add');

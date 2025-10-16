@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../services/supabase_service.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -13,16 +12,16 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final _nameCtrl  = TextEditingController();
+  final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
-  final _passCtrl  = TextEditingController();
+  final _passCtrl = TextEditingController();
   bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
     final svc = Provider.of<SupabaseService>(context, listen: false);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFFFF8F0), // soft beige background
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -30,15 +29,15 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Gradient Header
+                // 🌸 Gradient Header
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xFFF72585),
-                        Color(0xFF3A0CA3),
+                        Color(0xFFFF8FAB), // soft pink
+                        Color(0xFFFAD9C1), // light beige-pink
                       ],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
@@ -49,22 +48,25 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   child: Text(
-                    'Create Account',
+                    '𓇼 ⋆.˚ 𓆉 Create Account 𓆉 ⋆.˚ 𓇼',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.montserrat(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                    style: GoogleFonts.pacifico( // 🌷 changed header font for style
+                      fontSize: 26,
                       color: Colors.white,
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 24),
+
+                // Card Section
                 Card(
                   margin: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 4,
+                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(24),
                     child: Column(
@@ -73,11 +75,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         TextField(
                           controller: _nameCtrl,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.person, color: Color(0xFF3A0CA3)),
+                            prefixIcon: const Icon(Icons.person, color: Color(0xFFD47C8D)),
                             labelText: 'Name',
                             labelStyle: GoogleFonts.montserrat(color: Colors.grey[600]),
                             filled: true,
-                            fillColor: Colors.grey[100],
+                            fillColor: const Color(0xFFFFF2E5),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -85,15 +87,16 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         const SizedBox(height: 16),
+
                         // Email
                         TextField(
                           controller: _emailCtrl,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.email, color: Color(0xFF3A0CA3)),
+                            prefixIcon: const Icon(Icons.email, color: Color(0xFFD47C8D)),
                             labelText: 'Email',
                             labelStyle: GoogleFonts.montserrat(color: Colors.grey[600]),
                             filled: true,
-                            fillColor: Colors.grey[100],
+                            fillColor: const Color(0xFFFFF2E5),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -102,15 +105,16 @@ class _SignUpPageState extends State<SignUpPage> {
                           keyboardType: TextInputType.emailAddress,
                         ),
                         const SizedBox(height: 16),
+
                         // Password
                         TextField(
                           controller: _passCtrl,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock, color: Color(0xFF3A0CA3)),
+                            prefixIcon: const Icon(Icons.lock, color: Color(0xFFD47C8D)),
                             labelText: 'Password',
                             labelStyle: GoogleFonts.montserrat(color: Colors.grey[600]),
                             filled: true,
-                            fillColor: Colors.grey[100],
+                            fillColor: const Color(0xFFFFF2E5),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -118,20 +122,24 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           obscureText: true,
                         ),
+
                         const SizedBox(height: 24),
-                        // Sign Up button
+
+                        // 🌸 Sign Up Button
                         SizedBox(
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF3A0CA3),
+                              backgroundColor: const Color(0xFFFF8FAB),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               elevation: 3,
                             ),
-                            onPressed: _loading ? null : () async {
+                            onPressed: _loading
+                                ? null
+                                : () async {
                               final name = _nameCtrl.text.trim();
                               final email = _emailCtrl.text.trim();
                               final pass = _passCtrl.text;
@@ -158,23 +166,27 @@ class _SignUpPageState extends State<SignUpPage> {
                             )
                                 : Text(
                               'Sign Up',
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.pacifico( // 💗 use a different clean font here
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 12),
-                        // Error
+
+                        // Error Message
                         Consumer<SupabaseService>(
                           builder: (_, svc, __) => svc.error != null
                               ? Padding(
                             padding: const EdgeInsets.only(top: 12),
                             child: Text(
                               svc.error!,
-                              style: GoogleFonts.montserrat(color: Colors.redAccent),
+                              style: GoogleFonts.robotoMono( // ⚠️ monospace red text for clarity
+                                color: Colors.redAccent,
+                              ),
                             ),
                           )
                               : const SizedBox.shrink(),
@@ -183,12 +195,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 24),
+
+                // 🌷 Footer link
                 TextButton(
                   onPressed: () => Navigator.pushNamed(context, '/signin'),
                   child: Text(
                     'Already have an account? Sign In',
-                    style: GoogleFonts.montserrat(color: const Color(0xFF3A0CA3)),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFFD47C8D),
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
@@ -199,4 +217,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-

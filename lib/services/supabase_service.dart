@@ -1,4 +1,6 @@
-import 'dart:io';
+// lib/services/supabase_service.dart
+
+import 'dart:typed_data'; // MODIFICATION: Import for Uint8List
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/item.dart';
@@ -6,6 +8,7 @@ import '../models/item.dart';
 class SupabaseService extends ChangeNotifier {
   @override
   void notifyListeners() {
+    // A check to prevent calling notifyListeners() after dispose()
     if (hasListeners) super.notifyListeners();
   }
 
@@ -14,6 +17,7 @@ class SupabaseService extends ChangeNotifier {
   String? error;
 
   // ─── AUTH ───────────────────────────────────────────────────
+  // ... (Your auth methods remain unchanged)
   Future<bool> signUp(String email, String password, String displayName) async {
     error = null;
     try {
@@ -54,6 +58,7 @@ class SupabaseService extends ChangeNotifier {
     await supabase.auth.signOut();
   }
 
+
   // ─── FETCH ALL ITEMS ─────────────────────────────────────────
   Future<void> fetchItems() async {
     try {
@@ -73,54 +78,55 @@ class SupabaseService extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ─── ADD A NEW ITEM ───────────────────────────────────────────
+// ─── ADD A NEW ITEM (MODIFIED) ────────────────────────────────
   Future<void> addItem({
     required String title,
     required String desc,
     required double price,
     required String contact,
     required String uploaderName,
-    required File image,
+    // MODIFICATION: Accept bytes and a name instead of a File object
+    required Uint8List imageBytes,
+    required String imageName,
   }) async {
+    error = null;
     try {
-      // 1) upload image to storage
+      // 1) Upload image bytes to storage. This works for both mobile and web.
       final bucket = supabase.storage.from('thrift-images');
-      final path = 'thrift/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      if (kIsWeb) {
-        final bytes = await image.readAsBytes();
-        await bucket.uploadBinary(path, bytes);
-      } else {
-        await bucket.upload(path, image);
-      }
+      // Use the imageName passed from the form
+      await bucket.uploadBinary(
+        imageName,
+        imageBytes,
+        fileOptions: const FileOptions(cacheControl: '3600', upsert: false),
+      );
 
-      // 2) get the public URL
-      final urlRes = bucket.getPublicUrl(path);
-      final String url = bucket.getPublicUrl(path);
+      // 2) Get the public URL of the uploaded image
+      final url = bucket.getPublicUrl(imageName);
 
-      // 3) insert the new item record
+      // 3) Insert the new item record into the database
       final user = supabase.auth.currentUser;
       final email = user?.email ?? '';
       await supabase.from('items').insert({
-        'title':          title,
-        'description':    desc,
-        'price':          price,
-        'contact_info':   contact,
-        'uploaded_by':    uploaderName,
+        'title': title,
+        'description': desc,
+        'price': price,
+        'contact_info': contact,
+        'uploaded_by': uploaderName, // Matches your existing table structure
         'uploader_email': email,
-        'image_url':      url,
-        'created_at':     DateTime.now().toIso8601String(),
+        'image_url': url,
+        'created_at': DateTime.now().toIso8601String(),
       });
 
-      // 4) refresh the list
+      // 4) Refresh the list to show the new item
       await fetchItems();
     } on StorageException catch (e) {
-      error = e.message;
+      error = 'Storage Error: ${e.message}';
       notifyListeners();
     } on PostgrestException catch (e) {
-      error = e.message;
+      error = 'Database Error: ${e.message}';
       notifyListeners();
     } catch (e) {
-      error = e.toString();
+      error = 'An unexpected error occurred: ${e.toString()}';
       notifyListeners();
     }
   }
@@ -142,11 +148,8 @@ class SupabaseService extends ChangeNotifier {
   // ─── FETCH ONE ITEM DETAIL ───────────────────────────────────
   Future<Item?> fetchItemDetail(int id) async {
     try {
-      final data = await supabase
-          .from('items')
-          .select()
-          .eq('id', id)
-          .maybeSingle();
+      final data =
+      await supabase.from('items').select().eq('id', id).maybeSingle();
       if (data == null) throw PostgrestException(message: 'Item not found');
       return Item.fromMap(data as Map<String, dynamic>);
     } on PostgrestException catch (e) {

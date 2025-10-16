@@ -10,6 +10,20 @@ import '../../models/item.dart';
 import '../../widgets/info_chip.dart';
 import 'full_screen_image_page.dart';
 
+// --- Define the new color palette for easy reference ---
+// Beige: Color(0xFFFAD9C1) - End of gradient
+const Color beigeAccent = Color(0xFFFAD9C1);
+// Pink: Color(0xFFFF8FAB) - Start of gradient
+const Color softPink = Color(0xFFFF8FAB);
+// NEW: Slightly darker pink for the button
+const Color darkerPink = Color(0xFFE0778C);
+// A darker, muted pink for labels/icons on light backgrounds
+const Color mutedPink = Color(0xFFE57A8B);
+// A dark color for text on white surfaces (like the description box)
+const Color darkText = Colors.black87;
+// White for text on the dark gradient
+const Color whiteText = Colors.white;
+
 class ItemDetailPage extends StatelessWidget {
   final int itemId;
   const ItemDetailPage({super.key, required this.itemId});
@@ -22,9 +36,13 @@ class ItemDetailPage extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFF72585), Color(0xFF3A0CA3)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              softPink,    // Pink starts at top-left
+              beigeAccent, // Beige ends at bottom-right
+            ],
+            stops: [0.2, 0.8],
           ),
         ),
         child: SafeArea(
@@ -33,14 +51,14 @@ class ItemDetailPage extends StatelessWidget {
             builder: (context, snap) {
               if (snap.connectionState != ConnectionState.done) {
                 return const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
+                  child: CircularProgressIndicator(color: whiteText),
                 );
               }
               if (snap.hasError) {
                 return Center(
                   child: Text(
                     'Error: ${snap.error}',
-                    style: GoogleFonts.poppins(color: Colors.redAccent),
+                    style: GoogleFonts.montserrat(color: Colors.redAccent),
                   ),
                 );
               }
@@ -49,7 +67,7 @@ class ItemDetailPage extends StatelessWidget {
                 return Center(
                   child: Text(
                     'Item not found 🤷',
-                    style: GoogleFonts.poppins(color: Colors.white),
+                    style: GoogleFonts.montserrat(color: whiteText),
                   ),
                 );
               }
@@ -57,7 +75,7 @@ class ItemDetailPage extends StatelessWidget {
               return Stack(
                 children: [
                   ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 100),
                     children: [
                       // Back + title
                       Row(
@@ -65,20 +83,20 @@ class ItemDetailPage extends StatelessWidget {
                           GestureDetector(
                             onTap: () => Navigator.pop(context),
                             child:
-                            const Icon(Icons.arrow_back_ios, color: Colors.white),
+                            const Icon(Icons.arrow_back_ios, color: whiteText),
                           ),
                           const SizedBox(width: 8),
                           Text(
                             'Details',
-                            style: GoogleFonts.poppins(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                            style: GoogleFonts.pacifico(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: whiteText,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
 
                       // Tappable image with Hero
                       GestureDetector(
@@ -93,12 +111,12 @@ class ItemDetailPage extends StatelessWidget {
                           tag: 'item-image-${item.id}',
                           child: Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(16),
                               boxShadow: const [
                                 BoxShadow(
                                   color: Colors.black38,
-                                  blurRadius: 12,
-                                  offset: Offset(0, 6),
+                                  blurRadius: 15,
+                                  offset: Offset(0, 8),
                                 ),
                               ],
                             ),
@@ -112,55 +130,65 @@ class ItemDetailPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 32),
 
                       // Title & price
                       Text(
                         item.title,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.montserrat(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: whiteText,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         '₱ ${item.price.toStringAsFixed(2)}',
-                        style: GoogleFonts.poppins(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.yellowAccent,
+                        style: GoogleFonts.montserrat(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: beigeAccent,
                         ),
                       ),
                       const SizedBox(height: 24),
 
-                      // Description
+                      // Description Box
                       Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
-                          borderRadius: BorderRadius.circular(16),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Description',
-                              style: GoogleFonts.poppins(
+                              style: GoogleFonts.montserrat(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.deepPurple,
+                                color: mutedPink,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const Divider(color: beigeAccent, height: 16),
                             Text(
                               item.description,
-                              style: GoogleFonts.poppins(fontSize: 14),
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 15,
+                                  color: darkText
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 24),
 
                       // Info chips
                       SizedBox(
@@ -170,9 +198,9 @@ class ItemDetailPage extends StatelessWidget {
                           child: Row(
                             children: [
                               InfoChip(icon: Icons.person, text: item.uploadedBy),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 12),
                               InfoChip(icon: Icons.contact_mail, text: item.contactInfo),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 12),
                               InfoChip(
                                 icon: Icons.calendar_today,
                                 text: '${item.createdAt.month}/${item.createdAt.day}/${item.createdAt.year}',
@@ -186,50 +214,81 @@ class ItemDetailPage extends StatelessWidget {
 
                   // Contact Owner button
                   Positioned(
-                    bottom: 16,
-                    left: 16,
-                    right: 16,
+                    bottom: 24,
+                    left: 24,
+                    right: 24,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellowAccent,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        // KEY CHANGE: Use the darkerPink color here
+                        backgroundColor: darkerPink,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                         ),
+                        elevation: 5,
                       ),
                       onPressed: () async {
-                        final email = snap.data!.contactInfo.trim();
+                        final contact = snap.data!.contactInfo.trim();
                         final subject =
                         Uri.encodeComponent('Inquiry about "${item.title}"');
-                        final uri = Uri.parse('mailto:$email?subject=$subject');
-                        try {
-                          await launchUrl(uri,
-                              mode: LaunchMode.externalApplication);
-                        } catch (_) {
-                          showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              title: Text('Contact Owner',
-                                  style: GoogleFonts.poppins()),
-                              content: SelectableText(email,
-                                  style: GoogleFonts.poppins()),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('Close',
-                                      style: GoogleFonts.poppins()),
-                                ),
-                              ],
-                            ),
-                          );
+                        final uri = Uri.parse('mailto:$contact?subject=$subject');
+
+                        // Check if the contact is an email (simplified check)
+                        if (contact.contains('@')) {
+                          try {
+                            await launchUrl(uri,
+                                mode: LaunchMode.externalApplication);
+                          } catch (_) {
+                            // Fallback to dialog if mail app fails
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: Text('Contact Owner (Email)',
+                                    style: GoogleFonts.montserrat(color: mutedPink)),
+                                content: SelectableText(contact,
+                                    style: GoogleFonts.montserrat()),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('Close',
+                                        style: GoogleFonts.montserrat(color: darkerPink)),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } else {
+                          // If it looks like a phone number, attempt to call or show dialog
+                          final phoneUri = Uri.parse('tel:$contact');
+                          try {
+                            await launchUrl(phoneUri, mode: LaunchMode.externalApplication);
+                          } catch (_) {
+                            // Fallback to dialog if calling fails
+                            showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                title: Text('Contact Owner (Phone)',
+                                    style: GoogleFonts.montserrat(color: mutedPink)),
+                                content: SelectableText(contact,
+                                    style: GoogleFonts.montserrat()),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('Close',
+                                        style: GoogleFonts.montserrat(color: darkerPink)),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                         }
                       },
                       child: Text(
                         'Contact Owner',
-                        style: GoogleFonts.poppins(
-                          fontSize: 18,
+                        style: GoogleFonts.pacifico(
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepPurple,
+                          color: whiteText,
                         ),
                       ),
                     ),

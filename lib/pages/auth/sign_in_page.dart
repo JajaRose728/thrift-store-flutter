@@ -21,7 +21,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     final svc = Provider.of<SupabaseService>(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFFFF8F0), // soft beige background
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -29,15 +29,15 @@ class _SignInPageState extends State<SignInPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Gradient Header
+                // Pink Banner Header
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Color(0xFFF72585), // vibrant pink
-                        Color(0xFF3A0CA3), // deep purple
+                        Color(0xFFFF8FAB), // soft pink
+                        Color(0xFFFAD9C1), // light beige-pink gradient
                       ],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
@@ -48,9 +48,9 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   child: Text(
-                    '🛍️ Thrift Store',
+                    '𓇼 ⋆.˚ 𓆉 𓆝 𓆡⋆.˚ 𓇼reRun Store𓇼 ⋆.˚ 𓆉 𓆝 𓆡⋆.˚ 𓇼',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.montserrat(
+                    style: GoogleFonts.pacifico(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -64,6 +64,7 @@ class _SignInPageState extends State<SignInPage> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 4,
+                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(24),
                     child: Column(
@@ -71,11 +72,11 @@ class _SignInPageState extends State<SignInPage> {
                         TextField(
                           controller: _emailCtrl,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.email, color: Color(0xFF3A0CA3)),
+                            prefixIcon: const Icon(Icons.email, color: Color(0xFFD47C8D)), // muted pink icon
                             labelText: 'Email',
                             labelStyle: GoogleFonts.montserrat(color: Colors.grey[600]),
                             filled: true,
-                            fillColor: Colors.grey[100],
+                            fillColor: const Color(0xFFFFF2E5), // soft beige fill
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -87,11 +88,11 @@ class _SignInPageState extends State<SignInPage> {
                         TextField(
                           controller: _passCtrl,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock, color: Color(0xFF3A0CA3)),
+                            prefixIcon: const Icon(Icons.lock, color: Color(0xFFD47C8D)),
                             labelText: 'Password',
                             labelStyle: GoogleFonts.montserrat(color: Colors.grey[600]),
                             filled: true,
-                            fillColor: Colors.grey[100],
+                            fillColor: const Color(0xFFFFF2E5),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
@@ -105,7 +106,7 @@ class _SignInPageState extends State<SignInPage> {
                           height: 50,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFF72585),
+                              backgroundColor: const Color(0xFFFF8FAB), // pink button
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -137,7 +138,7 @@ class _SignInPageState extends State<SignInPage> {
                             )
                                 : Text(
                               'Sign In',
-                              style: GoogleFonts.montserrat(
+                              style: GoogleFonts.pacifico(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -151,7 +152,7 @@ class _SignInPageState extends State<SignInPage> {
                           child: Text(
                             'Don’t have an account? Sign Up',
                             style: GoogleFonts.montserrat(
-                              color: const Color(0xFF3A0CA3),
+                              color: const Color(0xFFD47C8D), // pink text link
                             ),
                           ),
                         ),
